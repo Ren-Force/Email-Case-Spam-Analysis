@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
 
 import pandas as pd
 from collections import Counter
@@ -20,13 +15,7 @@ from tabulate import tabulate
 from matplotlib import colors as mcolors
 
 
-# In[3]:
-
-
 nltk.download('averaged_perceptron_tagger')
-
-
-# In[13]:
 
 
 # Load and clean data function
@@ -47,10 +36,6 @@ def load_and_clean_data(file_path, remove_addresses=None):
     
     return df
 
-
-# In[14]:
-
-
 # File paths and addresses to remove
 spam_file_path = 'Your Spam Cases.csv'
 non_spam_file_path = 'Your Non Spam Cases.csv'
@@ -60,17 +45,9 @@ remove_addresses = ['your_email_address@to_remove.com']
 df_spam = load_and_clean_data(spam_file_path, remove_addresses=remove_addresses)
 df_non_spam = load_and_clean_data(non_spam_file_path)
 
-
-# In[18]:
-
-
 # Count occurrences of email addresses in Spam Reporting
 email_counts_spam = df_spam['FromAddress'].value_counts()
 email_counts_non_spam = df_non_spam['FromAddress'].value_counts()
-
-
-# In[19]:
-
 
 # Count occurrences of domains in Spam Reporting
 df_spam['Domain'] = df_spam['FromAddress'].apply(lambda x: x.split('@')[1] if '@' in x else 'unknown')
@@ -78,26 +55,14 @@ df_non_spam['Domain'] = df_non_spam['FromAddress'].apply(lambda x: x.split('@')[
 domain_counts_spam = df_spam['Domain'].value_counts()
 domain_counts_non_spam = df_non_spam['Domain'].value_counts()
 
-
-# In[17]:
-
-
 # Identify top 20 email addresses and domains in Spam Reporting
 top_email_addresses_spam = df_spam['FromAddress'].value_counts().head(20)
 df_spam['Domain'] = df_spam['FromAddress'].apply(lambda x: x.split('@')[1] if '@' in x else 'unknown')
 top_domains_spam = df_spam['Domain'].value_counts().head(20)
 
-
-# In[20]:
-
-
 # Count occurrences of these addresses and domains in Non Spam Reporting
 email_counts_non_spam = df_non_spam['FromAddress'].value_counts()
 domain_counts_non_spam = df_non_spam['FromAddress'].apply(lambda x: x.split('@')[1] if '@' in x else 'unknown').value_counts()
-
-
-# In[21]:
-
 
 # Create DataFrames for export
 email_df = pd.DataFrame({
@@ -117,10 +82,6 @@ email_df.to_csv('email_counts.csv', index=False)
 domain_df.to_csv('domain_counts.csv', index=False)
 
 print("CSVs saved successfully.")
-
-
-# In[10]:
-
 
 # Prepare data for tabular display
 email_data = {
@@ -197,10 +158,6 @@ format_table(axs[1], domain_data, 'Top Domains')
 plt.tight_layout()
 plt.show()
 
-
-# In[11]:
-
-
 # Display results
 print("Top 20 Email Addresses in Spam Reporting:")
 print(top_email_addresses_spam)
@@ -211,10 +168,6 @@ print("\nTop 20 Domains in Spam Reporting:")
 print(top_domains_spam)
 print("\nCounts in Non Spam Reporting:")
 print(domain_counts_non_spam.reindex(top_domains_spam.index, fill_value=0))
-
-
-# In[12]:
-
 
 # Select top addresses and domains from spam and their counts in non-spam
 top_email_addresses = top_email_addresses_spam.index
@@ -271,18 +224,10 @@ plt.gca().invert_yaxis()  # Invert y-axis to display highest count at the top
 plt.tight_layout()
 plt.show()
 
-
-# In[55]:
-
-
 # Custom tokenizer function to exclude tokens containing digits
 def custom_tokenizer(text):
     tokens = re.findall(r'\b(?:[a-zA-Z]+(?:[a-zA-Z]+[\'\-]?[a-zA-Z]+)*)\b', text.lower())  # Tokenize by words (excluding numbers)
     return tokens
-
-
-# In[25]:
-
 
 # Function to extract 2 or 3 word phrases from text
 def extract_specific_phrases(text):
@@ -312,10 +257,6 @@ def extract_specific_phrases(text):
     
     return phrases
 
-
-# In[26]:
-
-
 # Difine new file paths for NLP and Pattern Identification
 file_path = 'Your Spam Cases.csv'
 file_path_non = 'Your Non Spam Cases.csv'
@@ -336,10 +277,6 @@ for text in df['TextBody']:
 # Count phrase frequencies
 phrase_counts = Counter(extracted_phrases)
 
-
-# In[94]:
-
-
 # Get top phrases
 top_phrases = phrase_counts.most_common(100)
 
@@ -351,10 +288,6 @@ if len(top_phrases) >= 100:
 else:
     print("There are not enough phrases to print the top 50 to 100.")
 
-
-# In[96]:
-
-
 # Generate Word Cloud for top 50 to 100 phrases
 wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(dict(top_phrases[52:100]))
 
@@ -365,10 +298,6 @@ plt.axis('off')
 plt.title('Word Cloud of Top 50 to 100 Phrases')
 plt.show()
 
-
-# In[97]:
-
-
 # Summarize the intentions of the spam emails
 intentions = ['win', 'prize', 'free', 'urgent', 'limited time', 'offer', 'click here', 'buy now', 'congratulations']
 intention_counts = Counter()
@@ -377,10 +306,6 @@ for intention in intentions:
     intention_counts[intention] = df['TextBody'].str.contains(intention, case=False, na=False).sum()
 
 most_popular_intention = intention_counts.most_common(1)
-
-
-# In[132]:
-
 
 # Most Popular Spam Intention
 intention_df = pd.DataFrame(intention_counts.items(), columns=['Intention', 'Count']).sort_values(by='Count', ascending=False)
@@ -403,25 +328,13 @@ plt.ylabel('Intention')
 plt.tight_layout()
 plt.show()
 
-
-# In[99]:
-
-
 # Perform sentiment analysis
 df['Sentiment'] = df['TextBody'].apply(lambda x: TextBlob(str(x)).sentiment.polarity)
 sentiment_counts = df['Sentiment'].apply(lambda x: 'Positive' if x > 0 else 'Negative' if x < 0 else 'Neutral').value_counts()
 
-
-# In[27]:
-
-
 # Perform sentiment analysis
 df_non['Sentiment'] = df_non['TextBody'].apply(lambda x: TextBlob(str(x)).sentiment.polarity)
 sentiment_counts_non = df_non['Sentiment'].apply(lambda x: 'Positive' if x > 0 else 'Negative' if x < 0 else 'Neutral').value_counts()
-
-
-# In[134]:
-
 
 # Plotting with Seaborn
 plt.figure(figsize=(10, 6))
@@ -441,10 +354,6 @@ plt.ylabel('Count')
 plt.tight_layout()
 plt.show()
 
-
-# In[28]:
-
-
 # Plotting with Seaborn
 plt.figure(figsize=(10, 6))
 ax = sns.barplot(x=sentiment_counts_non.index, y=sentiment_counts_non.values, palette='viridis')
@@ -462,10 +371,5 @@ plt.xlabel('Sentiment')
 plt.ylabel('Count')
 plt.tight_layout()
 plt.show()
-
-
-# In[ ]:
-
-
 
 
