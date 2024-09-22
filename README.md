@@ -1,6 +1,6 @@
 # Spam Email Data Analysis
 ## Background
-The client had seen a significant increase in spam cases piling up, which required the support team to manually open each case, read the original email, and mark it as spam. This process was time-consuming and inefficient. My goal was to improve this workflow by analyzing existing spam data and identifying ways to potentially automate spam detection.
+The client had seen a gradual increase in the number of spam cases as the business grew and product lines expanded, which required the support team to manually open each case, read the original email, and mark it as spam. This process was time-consuming and inefficient. **Additionally, spam emails are very likely fraud-related, so preventing spam emails from being exposed to the user would help reduce the risk of fraud.** My goal was to improve this workflow by analyzing existing spam data and identifying ways to potentially automate spam detection.
 
 ## Purpose of Analysis
 To help the support team focus on real customer cases and reduce distractions, I conducted a spam analysis. This analysis aimed to:
